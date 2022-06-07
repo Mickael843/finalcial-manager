@@ -13,14 +13,14 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UserServiceTest extends TestHelper {
+class UserServiceTest extends TestHelper {
 
     private UserService service;
+    private static final String FAIL = "Não deveria passar por aqui.";
 
     @BeforeEach
     void setUp() {
@@ -35,15 +35,15 @@ public class UserServiceTest extends TestHelper {
     @Test
     @DisplayName("Dado um email existente, deve retornar o usuário no banco de dados!")
     void GIVEN_ExistingEmail_MUST_ReturnUserSavedInDatabase() {
-
-        User userSavedInDatabase = null;
         User user = new UserDTOBuilder().withName().withExistingEmail().withPassword().build().toModel();
 
-        try {
-            userSavedInDatabase = service.findUser(user.getEmail());
-        } catch (Exception e) {
-            fail("Não deve lançar uma exceção");
+        Optional<User> userOptional = service.findUser(user.getEmail());
+
+        if (userOptional.isEmpty()) {
+            fail(FAIL);
         }
+
+        User userSavedInDatabase = userOptional.get();
 
         assertNotNull(userSavedInDatabase.getCreatedAt());
         assertThat(userSavedInDatabase.getEmail(), equalTo(user.getEmail()));
@@ -51,16 +51,12 @@ public class UserServiceTest extends TestHelper {
     }
 
     @Test
-    @DisplayName("Dado um email inexistente, deve lançar uma exceção do tipo UserNotFoundException!")
-    void GIVEN_NonexistentEmail_MUST_ThrowUserNotFoundException() {
+    @DisplayName("Dado um email inexistente, deve retornar um objeto vazio")
+    void GIVEN_NonexistentEmail_MUST_ReturnOptionalEmpty() {
         User user = new UserDTOBuilder().withName().withEmail().withPassword().build().toModel();
 
-        try {
-            service.findUser(user.getEmail());
-            fail("Não deve chegar até aqui");
-        } catch (Exception e) {
-            // TODO Após criar tratamento de exceções, alterar esse bloco.
-            System.out.println("CHEGUEI ATÉ AQUI");
-        }
+        Optional<User> userOptional = service.findUser(user.getEmail());
+
+        assertTrue(userOptional.isEmpty());
     }
 }

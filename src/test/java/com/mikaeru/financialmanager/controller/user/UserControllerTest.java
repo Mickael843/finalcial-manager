@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class UserControllerTest extends IntegrationTestHelper {
+class UserControllerTest extends IntegrationTestHelper {
 
     private static final String ENDPOINT = "/v1/users/";
 

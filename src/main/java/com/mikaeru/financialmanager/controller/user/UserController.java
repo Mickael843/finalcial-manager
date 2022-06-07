@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody UserRequest request) {
+    public ResponseEntity<Void> registerUser(@RequestBody UserRequest request) {
 
         User user = request.toModel();
 
