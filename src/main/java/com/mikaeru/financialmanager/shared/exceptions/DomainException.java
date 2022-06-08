@@ -24,6 +24,14 @@ public class DomainException extends RuntimeException {
             this.message = message;
             this.code = code;
         }
+
+        void setFields(List<String> fields) {
+            this.fields = fields;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
     public int getCode() {

@@ -42,6 +42,10 @@ public class User {
         this.externalId = UUID.randomUUID();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public UUID getExternalId() {
         return externalId;
     }
