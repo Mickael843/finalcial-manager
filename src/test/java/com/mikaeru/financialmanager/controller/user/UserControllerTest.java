@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.core.Is.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest extends IntegrationTestHelper {
@@ -26,5 +28,18 @@ class UserControllerTest extends IntegrationTestHelper {
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**" + ENDPOINT + "*"));
+    }
+
+    @Test
+    @DisplayName("Dado um usuário já existente, deve retornar status code 400.")
+    void GIVEN_ExistingUser_MUST_ReturnDuplicatedDataException() throws Exception {
+        UserRequest request = new UserDTOBuilder().withName().withExistingEmail().withPassword().build();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT)
+                        .content(asJsonString(request))
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title", is("Invalid duplicated data!")));
     }
 }

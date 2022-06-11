@@ -22,7 +22,7 @@ public class UserDTOBuilder {
     }
 
     public UserDTOBuilder withExistingEmail() {
-        email = "teste@gmail.com";
+        email = "teste01@gmail.com";
         return this;
     }
 

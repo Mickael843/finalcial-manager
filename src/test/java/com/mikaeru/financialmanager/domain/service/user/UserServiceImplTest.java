@@ -15,7 +15,8 @@ import static com.mikaeru.financialmanager.shared.exceptions.DomainException.Err
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -53,7 +54,6 @@ class UserServiceImplTest extends TestHelper {
 
         User userSavedInDatabase = userOptional.get();
 
-        assertNotNull(userSavedInDatabase.getCreatedAt());
         assertThat(userSavedInDatabase.getEmail(), equalTo(user.getEmail()));
         assertThat(userSavedInDatabase.getExternalId(), not(equalTo(user.getExternalId())));
     }

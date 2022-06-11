@@ -10,9 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
@@ -20,15 +19,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DuplicatedDataException.class})
     protected ResponseEntity<Object> handleDuplicatedDataException(DuplicatedDataException exception, WebRequest request) {
-        List<Problem.Field> problemFields = new ArrayList<>();
-
-        for (int i = 0; i < exception.getFields().size(); i++) {
-            Problem.Field field = new Problem.Field(exception.getFields().get(i), exception.getMessage());
-            problemFields.add(field);
-        }
-
-        Problem problem = new Problem(exception.getMessage(), BAD_REQUEST.value(), problemFields, OffsetDateTime.now());
-
+        Problem problem = new Problem(exception.getMessage(), BAD_REQUEST.value(), emptyList(), OffsetDateTime.now());
         return handleExceptionInternal(exception, problem, new HttpHeaders(), BAD_REQUEST, request);
     }
 }
